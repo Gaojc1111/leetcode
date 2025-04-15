@@ -15,8 +15,10 @@ func removeElements(head *ListNode, val int) *ListNode {
 		if j.Val == val {
 			i.Next = j.Next
 			j = j.Next
+			continue
 		}
 		i = j
+		j = j.Next
 	}
 
 	return dummyHead.Next
