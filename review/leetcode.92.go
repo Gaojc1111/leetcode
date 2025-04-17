@@ -1,10 +1,5 @@
 package review
 
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
 /*
 https://leetcode.cn/problems/reverse-linked-list-ii/description/
 总体思路：双指针，类似反转链表,计算迭代次数

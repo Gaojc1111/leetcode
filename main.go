@@ -2,33 +2,31 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"sync"
 )
 
+type student struct {
+	Name string
+}
+
+var studentPool = sync.Pool{
+	New: func() interface{} {
+		return new(student)
+	},
+}
+
 func main() {
-	chLetter := make(chan struct{})
-	chNum := make(chan struct{})
+	stu := studentPool.Get().(*student)
+	fmt.Println("第一次Get操作：", stu)
 
-	go func() {
-		for i := 1; i <= 26; i++ {
-			<-chLetter
-			fmt.Print(string(rune(i-1+'A')), " ")
-			chNum <- struct{}{}
-		}
-	}()
+	stu.Name = "zhang3"
+	fmt.Println("设置 stu.Name =", stu.Name)
 
-	go func() {
-		for i := 1; i <= 26; i++ {
-			<-chNum
-			fmt.Print(i, " ")
-			if i != 26 {
-				time.Sleep(time.Second)
-				chLetter <- struct{}{} // 上面打印完Z后结束了，继续传递信号会阻塞
-			}
-		}
-	}()
+	studentPool.Put(stu) // 放回，实际使用时，记得进行reset
 
-	chLetter <- struct{}{}
-	time.Sleep(26 * time.Second)
+	stu = studentPool.Get().(*student)
+	fmt.Println("放回后Get数据:", stu)
 
+	stu1 := studentPool.Get().(*student)
+	fmt.Println("不放回Get数据:", stu1)
 }
