@@ -1,4 +1,4 @@
-package tree
+package review
 
 func minDepth(root *TreeNode) int {
 	if root == nil {
