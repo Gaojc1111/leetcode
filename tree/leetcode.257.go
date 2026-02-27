@@ -1,15 +1,14 @@
-package review
+package tree
 
 import (
-	"leetcode/tree"
 	"strconv"
 )
 
-func binaryTreePaths(root *tree.TreeNode) []string {
+func binaryTreePaths(root *TreeNode) []string {
 	ans := []string{}
 	var s string
-	var dfs func(node *tree.TreeNode)
-	dfs = func(node *tree.TreeNode) {
+	var dfs func(node *TreeNode)
+	dfs = func(node *TreeNode) {
 		if node == nil {
 			return
 		}

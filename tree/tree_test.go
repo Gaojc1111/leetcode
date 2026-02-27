@@ -1,7 +1,6 @@
 package tree
 
 import (
-	"leetcode/review"
 	"testing"
 )
 
@@ -32,7 +31,7 @@ func TestTree(t *testing.T) {
 	//	},
 	//})
 
-	review.binaryTreePaths(&TreeNode{
+	binaryTreePaths(&TreeNode{
 		Val: 1,
 		Left: &TreeNode{
 			Val: 2,
