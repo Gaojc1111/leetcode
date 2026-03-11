@@ -1,32 +1,28 @@
 package main
 
 import (
-	"fmt"
-	"sync"
+	"log/slog"
+
+	console "github.com/asynkron/goconsole"
+	"github.com/asynkron/protoactor-go/actor"
 )
 
-type student struct {
-	Name string
-}
+type (
+	hello      struct{ Who string }
+	helloActor struct{}
+)
 
-var studentPool = sync.Pool{
-	New: func() interface{} {
-		return new(student)
-	},
+func (state *helloActor) Receive(context actor.Context) {
+	switch msg := context.Message().(type) {
+	case *hello:
+		context.Logger().Info("Hello ", slog.String("who", msg.Who))
+	}
 }
 
 func main() {
-	stu := studentPool.Get().(*student)
-	fmt.Println("第一次Get操作：", stu)
-
-	stu.Name = "zhang3"
-	fmt.Println("设置 stu.Name =", stu.Name)
-
-	studentPool.Put(stu) // 放回，实际使用时，记得进行reset
-
-	stu = studentPool.Get().(*student)
-	fmt.Println("放回后Get数据:", stu)
-
-	stu1 := studentPool.Get().(*student)
-	fmt.Println("不放回Get数据:", stu1)
+	system := actor.NewActorSystem()
+	props := actor.PropsFromProducer(func() actor.Actor { return &helloActor{} })
+	pid := system.Root.Spawn(props)
+	system.Root.Send(pid, &hello{Who: "Roger"})
+	_, _ = console.ReadLine()
 }

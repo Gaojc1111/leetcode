@@ -1,0 +1,15 @@
+syntax = "proto3";
+package smartbulb;
+option go_package = "proto-cluster-tutorial/smartbulb";
+
+import "google/protobuf/empty.proto";
+
+message GetStateResponse {
+  bool isOn = 1;
+}
+
+service SmartBulb {
+  rpc TurnOn(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc TurnOff(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc GetState(google.protobuf.Empty) returns (GetStateResponse);
+}
